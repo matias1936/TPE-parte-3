@@ -13,10 +13,11 @@ class TaskApiController {
 
     // /api/tareas
     public function getAll($req, $res) {
-        $filtrarFinalizadas = false;
+        $filtrarFinalizadas = null;
         // obtengo las tareas de la DB
-        if(isset($req->query->finalizadas) && $req->query->finalizadas == 'false')
-            $filtrarFinalizadas = true;
+        if(isset($req->query->finalizadas)) {
+            $filtrarFinalizadas = $req->query->finalizadas;
+        }
         
         $orderBy = false;
         if(isset($req->query->orderBy))

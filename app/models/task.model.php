@@ -7,11 +7,14 @@ class TaskModel {
        $this->db = new PDO('mysql:host=localhost;dbname=db_tareas;charset=utf8', 'root', '');
     }
  
-    public function getTasks($filtrarFinalizadas = false, $orderBy = false) {
+    public function getTasks($filtrarFinalizadas = null, $orderBy = false) {
         $sql = 'SELECT * FROM tareas';
 
-        if($filtrarFinalizadas) {
-            $sql .= ' WHERE finalizada = 0';
+        if($filtrarFinalizadas != null) {
+            if($filtrarFinalizadas == 'true')
+                $sql .= ' WHERE finalizada = 1';
+            else
+                $sql .= ' WHERE finalizada = 0';
         }
 
         if($orderBy) {
