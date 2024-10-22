@@ -113,5 +113,44 @@ class TaskApiController {
         $this->view->response($task, 200);
     }
 
+    
+    /**
+     * Método para actualizar el subrecurso "finalizada" de tareas.
+     * 
+     * api/tareas/:id/finalizada (respeta RESTFul)
+     * 
+     * NOTA: se podria (y es mejor) usar un PATCH a api/tareas/:id
+     * ya que es similar al PUT pero solo modifica lo que envias en
+     * el body, el resto de los campos los deja igual.
+     * (más dificil de implementar) 
+     * 
+     */
+    public function setFinalize($req, $res) {
+        $id = $req->params->id;
+
+        // verifico que exista
+        $task = $this->model->getTask($id);
+        if (!$task) {
+            return $this->view->response("La tarea con el id=$id no existe", 404);
+        }
+
+        // valido los datos obligatorios
+        if (!isset($req->body->finalizada)) {
+            return $this->view->response('Faltan completar datos', 400);
+        }
+
+        // valido tipo de datos
+        if ($req->body->finalizada !== 1 && $req->body->finalizada !== 0) {
+            return $this->view->response('Tipo de dato incorrecto', 400);
+        }
+
+        // finalizamos
+        $this->model->setFinalize($id, $req->body->finalizada);
+
+         // obtengo la tarea modificada y la devuelvo en la respuesta
+         $task = $this->model->getTask($id);
+         $this->view->response($task, 200);
+    }
+
 }
 

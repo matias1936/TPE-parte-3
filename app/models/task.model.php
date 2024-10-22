@@ -61,9 +61,9 @@ class TaskModel {
         $query->execute([$id]);
     }
 
-    public function finalizeTask($id) {        
-        $query = $this->db->prepare('UPDATE tareas SET finalizada = 1 WHERE id = ?');
-        $query->execute([$id]);
+    public function setFinalize($id, $finalizada) {        
+        $query = $this->db->prepare('UPDATE tareas SET finalizada = ? WHERE id = ?');
+        $query->execute([$finalizada, $id,]);
     }
 
     function updateTask($id, $titulo, $descripcion, $prioridad, $finalizada) {    
