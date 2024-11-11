@@ -10,6 +10,7 @@ class RegistrosApiController {
         $this->model = new RegistroModel();
         $this->view = new JSONView();
     }
+    hola
 
     
     public function getAll($req, $res) {
