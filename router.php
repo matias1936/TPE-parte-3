@@ -2,16 +2,16 @@
     
     require_once 'libs/router.php';
 
-    require_once 'app/controllers/task.api.controller.php';
+    require_once 'app/controllers/registro.api.controller.php';
 
     $router = new Router();
 
     #                 endpoint        verbo      controller              metodo
-    $router->addRoute('tareas'      ,            'GET',     'TaskApiController',   'getAll');
-    $router->addRoute('tareas/:id'  ,            'GET',     'TaskApiController',   'get'   );
-    $router->addRoute('tareas/:id'  ,            'DELETE',  'TaskApiController',   'delete');
-    $router->addRoute('tareas'  ,                'POST',    'TaskApiController',   'create');
-    $router->addRoute('tareas/:id'  ,            'PUT',     'TaskApiController',   'update');
-    $router->addRoute('tareas/:id/finalizada'  , 'PUT',     'TaskApiController',   'setFinalize');
+    $router->addRoute('registros'      ,             'GET',     'RegistrosApiController',   'getAll');
+    $router->addRoute('registros/:id'  ,            'GET',     'RegistrosApiController',   'get'   );
+    $router->addRoute('registros/:id'  ,            'DELETE',  'RegistrosApiController',   'delete');
+    $router->addRoute('registros'  ,                'POST',    'RegistrosApiController',   'create');
+    $router->addRoute('registros/:id'  ,            'PUT',     'RegistrosApiController',   'update');
+    $router->addRoute('registros'  , 'PUT',     'RegistrosApiController',   '');
 
     $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
