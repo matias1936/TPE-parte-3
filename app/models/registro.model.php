@@ -9,14 +9,12 @@ class RegistroModel {
  
     public function getRegistros($sortField = null, $sortOrder = null) {
         $sql = 'SELECT * FROM registros';
-    
-        // Añadir la ordenación solo si se especifican ambos parámetros
+
         if ($sortField && $sortOrder) {
             $sql .= ' ORDER BY ' . $sortField;
             $sql .= ($sortOrder === 'desc') ? ' DESC' : ' ASC';
         }
-    
-        // Ejecutar la consulta
+
         $query = $this->db->prepare($sql);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_OBJ);
@@ -31,13 +29,7 @@ class RegistroModel {
         $registro = $query->fetch(PDO::FETCH_OBJ);
         return $registro;
     }
-    /* 
-        $nombre = $req->body->nombre;       
-        $action = $req->body->action;       
-        $fecha = $req->body->fecha;
-        $hora = $req->body->hora;
-        $establecimiento_id = $req->body->establecimiento_id;       
-    */  
+
     public function insertRegistro($nombre, $action, $fecha, $hora, $establecimiento_id) {
         try {
             $query = $this->db->prepare('INSERT INTO registros(nombre, action, fecha, hora, establecimiento_id) VALUES (?, ?, ?, ?, ?)');
@@ -50,11 +42,10 @@ class RegistroModel {
     }
     
     public function existeEstablecimiento($establecimiento_id) {
-        // Preparar la consulta SQL para verificar si el establecimiento existe
+
         $query = $this->db->prepare("SELECT COUNT(*) FROM establecimientos WHERE id = ?");
         $query->execute([$establecimiento_id]);
-    
-        // Obtener el resultado y verificar si hay al menos un registro
+
         $count = $query->fetchColumn();
         
         return $count > 0;
@@ -68,10 +59,10 @@ class RegistroModel {
 
 
 
-    function updateRegistro($id, $nombre, $action, $fecha, $establecimiento_id) {    
-        $query = $this->db->prepare('UPDATE registros SET nombre= ?, action = ?, fecha = ?, establecimiento_id = ? WHERE id = ?');
-        $query->execute([$nombre, $action, $fecha, $establecimiento_id, $id]);
-    }
+    function updateRegistro($id, $nombre, $action, $fecha, $hora, $establecimiento_id) {    
+        $query = $this->db->prepare('UPDATE registros SET nombre= ?, action = ?, fecha = ?, hora = ?, establecimiento_id = ? WHERE id = ?');
+        $query->execute([$nombre, $action, $fecha,$hora, $establecimiento_id, $id]);
+    } 
     
   
     
