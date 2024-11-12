@@ -10,19 +10,16 @@ class RegistrosApiController {
         $this->model = new RegistroModel();
         $this->view = new JSONView();
     }
+
     
     public function getAll($req, $res) {
-        // Verificar si se ha pasado un campo para ordenar y un orden específico
         $sortField = !empty($req->query->sortField) ? $req->query->sortField : null;
         $sortOrder = !empty($req->query->sortOrder) ? $req->query->sortOrder : null;
-    
-        // Validación del campo de ordenación para evitar inyección SQL
+
         $validFields = ['id', 'nombre', 'action', 'fecha', 'hora', 'id_establecimiento'];
         if ($sortField && !in_array($sortField, $validFields)) {
-            return $this->view->response(["error" => "Campo de ordenación inválido"], 400);
+            return $this->view->response("Campo de ordenación inválido", 400);
         }
-    
-        // Llamar al modelo y obtener los registros, con ordenación si se especificó
         $registros = $this->model->getRegistros($sortField, $sortOrder);
     
         return $this->view->response($registros);
@@ -113,39 +110,33 @@ class RegistrosApiController {
 
     public function update($req, $res) {
         $id = $req->params->id;
-
+    
         $registro = $this->model->getRegistro($id);
         if (!$registro) {
-            return $this->view->response("el registro con el id=$id no existe", 404);
+            return $this->view->response("El registro con el id=$id no existe", 404);
         }
-
-         if (empty($req->body->titulo) || empty($req->body->prioridad) || empty($req->body->finalizada)) {
+    
+        if (empty($req->body->nombre) || empty($req->body->action) || empty($req->body->fecha) || empty($req->body->hora) || empty($req->body->establecimiento_id)) {
             return $this->view->response('Faltan completar datos', 400);
         }
-
-        $titulo = $req->body->titulo;       
-        $descripcion = $req->body->descripcion;       
-        $prioridad = $req->body->prioridad;
-        $finalizada = $req->body->finalizada;
-
-        $this->model->updateRegistro($id, $titulo, $descripcion, $prioridad, $finalizada);
-
+    
+        $nombre = $req->body->nombre;       
+        $action = $req->body->action;       
+        $fecha = $req->body->fecha;
+        $hora = $req->body->hora;
+        $establecimiento_id = $req->body->establecimiento_id;
+    
+        if (!$this->model->existsEstablecimiento($establecimiento_id)) {
+            return $this->view->response("El establecimiento con id=$establecimiento_id no existe", 400);
+        }
+    
+        $this->model->updateRegistro($id, $nombre, $action, $fecha, $establecimiento_id);
+    
         $registro = $this->model->getRegistro($id);
         $this->view->response($registro, 200);
     }
-
     
-    /**
-     * Método para actualizar el subrecurso "finalizada" de tareas.
-     * 
-     * api/tareas/:id/finalizada (respeta RESTFul)
-     * 
-     * NOTA: se podria (y es mejor) usar un PATCH a api/tareas/:id
-     * ya que es similar al PUT pero solo modifica lo que envias en
-     * el body, el resto de los campos los deja igual.
-     * (más dificil de implementar) 
-     * 
-     */
+
     public function setFinalize($req, $res) {
         $id = $req->params->id;
 

@@ -19,8 +19,6 @@ class RegistroModel {
         // Ejecutar la consulta
         $query = $this->db->prepare($sql);
         $query->execute();
-    
-        // Retornar los datos como un arreglo de objetos
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
     
@@ -30,9 +28,7 @@ class RegistroModel {
     public function getRegistro($id) {    
         $query = $this->db->prepare('SELECT * FROM registros WHERE id = ?');
         $query->execute([$id]);   
-    
         $registro = $query->fetch(PDO::FETCH_OBJ);
-    
         return $registro;
     }
     /* 
@@ -72,8 +68,16 @@ class RegistroModel {
 
 
 
-    function updateRegistro($id, $titulo, $descripcion, $prioridad, $finalizada) {    
-        $query = $this->db->prepare('UPDATE registros SET titulo = ?, descripcion = ?, prioridad = ?, finalizada = ? WHERE id = ?');
-        $query->execute([$titulo, $descripcion, $prioridad, $finalizada, $id]);
+    function updateRegistro($id, $nombre, $action, $fecha, $establecimiento_id) {    
+        $query = $this->db->prepare('UPDATE registros SET nombre= ?, action = ?, fecha = ?, establecimiento_id = ? WHERE id = ?');
+        $query->execute([$nombre, $action, $fecha, $establecimiento_id, $id]);
     }
+    
+    public function existsEstablecimiento($establecimiento_id) {
+        $query = $this->db->prepare('SELECT id FROM establecimientos WHERE id = ?');
+        $query->execute([$establecimiento_id]);
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        return $result !== false; // Retorna true si encontró un registro, false si no
+    }
+    
 }
