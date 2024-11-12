@@ -10,8 +10,6 @@ class RegistrosApiController {
         $this->model = new RegistroModel();
         $this->view = new JSONView();
     }
-    hola
-
     
     public function getAll($req, $res) {
         // Verificar si se ha pasado un campo para ordenar y un orden específico
@@ -60,25 +58,58 @@ class RegistrosApiController {
         $this->view->response("el registro con el id=$id se eliminó con éxito");
     }
 
-    public function create($req, $res) {
+    public function createRegistro($req, $res) {
 
-        if (empty($req->body->titulo) || empty($req->body->prioridad)) {
+        // Verificar que todos los campos están definidos y no están vacíos
+        if (empty($req->body->nombre) || empty($req->body->action) || empty($req->body->fecha) || empty($req->body->hora) || empty($req->body->establecimiento_id)) {
             return $this->view->response('Faltan completar datos', 400);
         }
-
-        $titulo = $req->body->titulo;       
-        $descripcion = $req->body->descripcion;       
-        $prioridad = $req->body->prioridad;       
-
-        $id = $this->model->insertRegistro($titulo, $descripcion, $prioridad);
-
+    
+        // Asignar valores después de validarlos
+        $nombre = trim($req->body->nombre);
+        $action = strtoupper(trim($req->body->action));  // Convertir a mayúsculas
+        $fecha = trim($req->body->fecha);
+        $hora = trim($req->body->hora);
+        $establecimiento_id = $req->body->establecimiento_id;
+    
+        // Verificar que los campos de nombre y acción no estén vacíos después del trim
+        if (empty($nombre) || empty($action)) {
+            return $this->view->response('El campo "nombre" o "action" no puede estar vacío', 400);
+        }
+    
+        // Verificar que el campo action solo contenga "ENTRADA" o "SALIDA"
+        if ($action !== 'ENTRADA' && $action !== 'SALIDA') {
+            return $this->view->response('Indique si es ENTRADA o SALIDA', 400);
+        }
+    
+        // Verificar que la fecha y la hora estén en un formato aceptable
+        if (empty($fecha) || empty($hora)) {
+            return $this->view->response('La "fecha" o "hora" no puede estar vacía', 400);
+        }
+    
+        // Verificar que el establecimiento_id sea un número entero
+        if (!is_numeric($establecimiento_id) || intval($establecimiento_id) <= 0) {
+            return $this->view->response('El "establecimiento_id" debe ser un número válido', 400);
+        }
+    
+        // Verificar que el establecimiento existe en la base de datos
+        if (!$this->model->existeEstablecimiento($establecimiento_id)) {
+            return $this->view->response('El "establecimiento_id" proporcionado no existe', 400);
+        }
+    
+        // Intentar insertar el registro después de pasar todas las validaciones
+        $id = $this->model->insertRegistro($nombre, $action, $fecha, $hora, $establecimiento_id);
+    
         if (!$id) {
             return $this->view->response("Error al insertar registro", 500);
         }
-
+    
         $registro = $this->model->getRegistro($id);
         return $this->view->response($registro, 201);
     }
+    
+    
+    
 
     public function update($req, $res) {
         $id = $req->params->id;
