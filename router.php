@@ -11,7 +11,7 @@
     $router->addRoute('registros/:id'  ,            'GET',     'RegistrosApiController',   'get'   );
     $router->addRoute('registros/:id'  ,            'DELETE',  'RegistrosApiController',   'delete');
     $router->addRoute('registros'      ,            'POST',    'RegistrosApiController',   'createRegistro');
-    $router->addRoute('registros/:id'  ,            'PUT',     'RegistrosApiController',   'update');
+    $router->addRoute('registros/:id'  ,            'PUT',     'RegistrosApiController',   'updateRegistro');
 
 
     $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);

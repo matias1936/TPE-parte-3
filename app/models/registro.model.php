@@ -73,11 +73,6 @@ class RegistroModel {
         $query->execute([$nombre, $action, $fecha, $establecimiento_id, $id]);
     }
     
-    public function existsEstablecimiento($establecimiento_id) {
-        $query = $this->db->prepare('SELECT id FROM establecimientos WHERE id = ?');
-        $query->execute([$establecimiento_id]);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-        return $result !== false; // Retorna true si encontró un registro, false si no
-    }
+  
     
 }

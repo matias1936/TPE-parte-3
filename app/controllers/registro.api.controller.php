@@ -99,7 +99,7 @@ class RegistrosApiController {
     
 
 
-    public function update($req, $res) {
+    public function updateRegistro($req, $res) {
         $id = $req->params->id;
         $registro = $this->model->getRegistro($id);
         if (!$registro) {
@@ -114,7 +114,7 @@ class RegistrosApiController {
         $hora = $req->body->hora;
         $establecimiento_id = $req->body->establecimiento_id;
     
-        if (!$this->model->existsEstablecimiento($establecimiento_id)) {
+        if (!$this->model->existeEstablecimiento($establecimiento_id)) {
             return $this->view->response("El establecimiento con id=$establecimiento_id no existe", 400);
         }
         $this->model->updateRegistro($id, $nombre, $action, $fecha, $establecimiento_id);
