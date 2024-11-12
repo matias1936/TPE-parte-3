@@ -6,11 +6,11 @@
 
     $router = new Router();
 
-    #                 endpoint        verbo      controller              metodo
-    $router->addRoute('registros'      ,             'GET',     'RegistrosApiController',   'getAll');
+    #                      endpoint                            verbo                  controller                          metodo
+    $router->addRoute('registros'      ,            'GET',     'RegistrosApiController',   'getAll');
     $router->addRoute('registros/:id'  ,            'GET',     'RegistrosApiController',   'get'   );
     $router->addRoute('registros/:id'  ,            'DELETE',  'RegistrosApiController',   'delete');
-    $router->addRoute('registros'  ,                'POST',    'RegistrosApiController',   'create');
+    $router->addRoute('registros'      ,            'POST',    'RegistrosApiController',   'createRegistro');
     $router->addRoute('registros/:id'  ,            'PUT',     'RegistrosApiController',   'update');
 
 

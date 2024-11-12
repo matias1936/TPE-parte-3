@@ -31,15 +31,35 @@ class RegistroModel {
         $registro = $query->fetch(PDO::FETCH_OBJ);
         return $registro;
     }
- 
-    public function insertRegistro($title, $description, $priority, $finished = false) { 
-        $query = $this->db->prepare('INSERT INTO registros(titulo, descripcion, prioridad, finalizada) VALUES (?, ?, ?, ?)');
-        $query->execute([$title, $description, $priority, $finished]);
-    
-        $id = $this->db->lastInsertId();
-    
-        return $id;
+    /* 
+        $nombre = $req->body->nombre;       
+        $action = $req->body->action;       
+        $fecha = $req->body->fecha;
+        $hora = $req->body->hora;
+        $establecimiento_id = $req->body->establecimiento_id;       
+    */  
+    public function insertRegistro($nombre, $action, $fecha, $hora, $establecimiento_id) {
+        try {
+            $query = $this->db->prepare('INSERT INTO registros(nombre, action, fecha, hora, establecimiento_id) VALUES (?, ?, ?, ?, ?)');
+            $query->execute([$nombre, $action, $fecha, $hora, $establecimiento_id]);
+            return $this->db->lastInsertId();
+        } catch (PDOException $e) {
+            error_log("Error de inserción en registros: " . $e->getMessage());
+            return null;
+        }
     }
+    
+    public function existeEstablecimiento($establecimiento_id) {
+        // Preparar la consulta SQL para verificar si el establecimiento existe
+        $query = $this->db->prepare("SELECT COUNT(*) FROM establecimientos WHERE id = ?");
+        $query->execute([$establecimiento_id]);
+    
+        // Obtener el resultado y verificar si hay al menos un registro
+        $count = $query->fetchColumn();
+        
+        return $count > 0;
+    }
+    
  
     public function eraseRegistro($id) {
         $query = $this->db->prepare('DELETE FROM registros WHERE id = ?');
