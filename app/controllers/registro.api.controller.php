@@ -13,13 +13,24 @@ class RegistrosApiController {
 
 
     public function getAll($req, $res) {
+
         $sortField = !empty($req->query->sortField) ? $req->query->sortField : null;
         $sortOrder = !empty($req->query->sortOrder) ? $req->query->sortOrder : null;
+    
+        $filterField = !empty($req->query->filterField) ? $req->query->filterField : null;
+        $filterValue = !empty($req->query->filterValue) ? $req->query->filterValue : null;
+    
         $validFields = ['id', 'nombre', 'action', 'fecha', 'hora', 'id_establecimiento'];
+    
         if ($sortField && !in_array($sortField, $validFields)) {
             return $this->view->response("Campo de ordenación inválido", 400);
         }
-        $registros = $this->model->getRegistros($sortField, $sortOrder);
+    
+        if ($filterField && !in_array($filterField, $validFields)) {
+            return $this->view->response("Campo de filtrado inválido", 400);
+        }
+
+        $registros = $this->model->getRegistros($sortField, $sortOrder, $filterField, $filterValue);
     
         return $this->view->response($registros);
     }
@@ -135,23 +146,4 @@ class RegistrosApiController {
         $registro = $this->model->getRegistro($id);
         return $this->view->response($registro, 200);
     }
-    
-
-    public function setFinalize($req, $res) {
-        $id = $req->params->id;
-        $registro = $this->model->getRegistro($id);
-        if (!$registro) {
-            return $this->view->response("el registro con el id=$id no existe", 404);
-        }
-        if (!isset($req->body->finalizada)) {
-            return $this->view->response('Faltan completar datos', 400);
-        }
-        if ($req->body->finalizada !== 1 && $req->body->finalizada !== 0) {
-            return $this->view->response('Tipo de dato incorrecto', 400);
-        }
-         $registro = $this->model->getRegistro($id);
-         $this->view->response($registro, 200);
-    }
-
 }
-

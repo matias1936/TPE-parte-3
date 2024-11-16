@@ -7,17 +7,23 @@ class RegistroModel {
        $this->db = new PDO('mysql:host=localhost;dbname=db_registros;charset=utf8', 'root', '');
     }
  
-    public function getRegistros($sortField = null, $sortOrder = null) {
-        $sql = 'SELECT * FROM registros';
-
-        if ($sortField && $sortOrder) {
-            $sql .= ' ORDER BY ' . $sortField;
-            $sql .= ($sortOrder === 'desc') ? ' DESC' : ' ASC';
+    public function getRegistros($sortField = null, $sortOrder = 'ASC', $filterField = null, $filterValue = null) {
+        $query = "SELECT * FROM registros";
+    
+        $params = [];
+        if ($filterField && $filterValue) {
+            $query .= " WHERE $filterField LIKE ?";
+            $params[] = "%$filterValue%";
         }
-
-        $query = $this->db->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_OBJ);
+    
+        if ($sortField) {
+            $query .= " ORDER BY $sortField " . (strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC');
+        }
+    
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     
