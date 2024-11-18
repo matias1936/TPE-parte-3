@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-11-2024 a las 23:44:05
+-- Tiempo de generación: 18-11-2024 a las 02:29:30
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -55,7 +55,7 @@ CREATE TABLE `registros` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `action` enum('ENTRADA','SALIDA') NOT NULL,
-  `fecha` date NOT NULL,
+  `fecha` varchar(15) NOT NULL,
   `hora` time NOT NULL,
   `establecimiento_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -65,12 +65,22 @@ CREATE TABLE `registros` (
 --
 
 INSERT INTO `registros` (`id`, `nombre`, `action`, `fecha`, `hora`, `establecimiento_id`) VALUES
-(26, 'Carlos Santana', 'ENTRADA', '2024-10-09', '03:31:00', 18),
-(27, 'Matias Toledo', 'ENTRADA', '2024-10-11', '22:37:00', 18),
+(26, 'Matias Toledo', 'ENTRADA', '2024-11-11', '13:00:00', 18),
+(27, 'Matias Toledo', 'SALIDA', '2024-11-11', '22:37:00', 18),
 (28, 'Javier Milei', 'ENTRADA', '2024-10-21', '06:50:00', 23),
 (29, 'Javier Milei ', 'SALIDA', '2024-10-21', '18:50:00', 23),
 (30, 'Lionel Messi', 'ENTRADA', '2024-10-20', '05:50:00', 14),
-(31, 'Lionel Messi', 'SALIDA', '2024-10-20', '18:50:00', 14);
+(31, 'Lionel Messi', 'SALIDA', '2024-10-20', '18:50:00', 14),
+(32, 'Carlitos Bala', 'ENTRADA', '2024-10-09', '06:00:00', 18),
+(33, 'Carlitos Bala', 'SALIDA', '2024-10-09', '12:00:00', 18),
+(47, 'Edith Piaf', 'ENTRADA', '2024-04-13', '13:00:00', 18),
+(48, 'Edith Piaf', 'SALIDA', '2024-04-13', '13:00:00', 18),
+(49, 'Edith Piaf', 'SALIDA', '0000-00-00', '13:00:00', 18),
+(50, 'Edith Piaf', 'SALIDA', '2024-04-13', '13:00:00', 18),
+(52, 'Matias Toledo', 'ENTRADA', '2024-10-11', '13:00:00', 18),
+(54, 'Donald Trump', 'ENTRADA', '17/11/2024', '12:00:00', 18),
+(55, 'Donald Trump', 'SALIDA', '17/11/2024', '18:00:00', 18),
+(56, 'Oroquieta Merlino, Luciano', 'ENTRADA', '17/11/2024', '13:00:00', 18);
 
 -- --------------------------------------------------------
 
@@ -129,7 +139,7 @@ ALTER TABLE `establecimientos`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
